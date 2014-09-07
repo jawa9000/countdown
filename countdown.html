@@ -1,0 +1,204 @@
+<html>
+	<head>
+		<style>
+			#secondsContainer, #minutesContainer, #seconds, #minutes, #hoursContainer, #hours, #daysContainer, #days {
+				width: 120px;
+				height: 25px;
+			}
+			#secondsBackground, #minutesBackground, #hoursBackground, #daysBackground {
+				background: blue;
+				height: 25px;
+			}
+			#container, #roundContainer {position: relative;}
+			#hoursContainer, #minutesContainer, #secondsContainer, #daysContainer {
+				background: black;
+			}
+			#hoursBackground, #hours, #minutesBackground, #minutes, #secondsBackground, #seconds, #daysBackground, #days {
+				position: absolute;
+				top: 0px;
+				left: 0;
+				z-index: 1;
+				color: yellow;
+				text-align: center;
+			}
+			#hoursBackground, #hours {
+				top: 25px;
+			}
+			#minutesBackground, #minutes {
+				top: 50px;
+			}
+			#secondsBackground, #seconds {
+				top: 75px;
+			}
+			#days, #hours, #minutes, #seconds {
+				z-index: 5;
+				line-height: 25px;			
+			}
+			
+			#roundContainer {
+				width: 120px;
+				height: 120px;
+			}
+			#roundDays, #roundHours, #roundMinutes, #roundSeconds {
+				background: rgba(0,0,255,0.1);
+				position: absolute;
+				top: 0px;
+				left: 0;
+				margin: auto;
+				width: 120px;
+				height: 120px;
+				border-radius: 120px
+			}
+			#roundSeconds {z-index: 4;}
+			#roundMinutes {z-index: 3;}
+			#roundHours {z-index: 2;}
+			#roundDays {
+				z-index: 1;
+				background: rgba(255,0,0,0.1);
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="countdown"></div>
+		<div id="container">
+			<div id="daysContainer">
+				<div id="daysBackground"></div>
+				<div id="days"></div>
+			</div>
+			<div id="hoursContainer">
+				<div id="hoursBackground"></div>
+				<div id="hours"></div>
+			</div>
+			<div id="minutesContainer">
+				<div id="minutesBackground"></div>
+				<div id="minutes"></div>
+			</div>
+			<div id="secondsContainer">
+				<div id="secondsBackground"></div>
+				<div id="seconds"></div>
+			</div>
+		</div>
+		<div id="roundContainer">
+			<!--<div id="roundDays" title="days"></div>-->
+			<div id="roundHours" title="hours"></div>
+			<div id="roundMinutes" title="minutes"></div>
+			<div id="roundSeconds" title="seconds"></div>
+		</div>
+	</body>
+	<script>
+		var date = "Sep 13, 2014";
+		var targetDate = new Date(date).getTime(); // set the date we're counting down to
+		var eventName = "Cheese it!"; // title of event	
+		var days, hours, minutes, seconds, message; // variables for time units and output message
+		var eventHour = 13;
+		var eventMinute = 10;
+
+		setInterval(function () { // update the tag with id "countdown" every 1 second
+		    var currentDate = new Date().getTime();
+		    currentDate = currentDate + (-eventHour * 3600000) + (-eventMinute * 60000);
+		    var secondsLeft = (targetDate - currentDate) / 1000; // find the amount of "seconds" between now and target
+			
+		    // do some calculations
+		    days = parseInt(secondsLeft / 86400); // days left
+		    secondsLeft = secondsLeft % 86400; // subtract days from time left
+		    hours = parseInt(secondsLeft / 3600); // hours left
+		    secondsLeft = secondsLeft % 3600; // subtract hours from time left
+		    minutes = parseInt(secondsLeft / 60); // minutes left
+		    seconds = parseInt(secondsLeft % 60); // seconds left
+
+			// output message and time remaining
+			message = "<h1>Are you ready for " + eventName + "?</h1><br/>";
+			if (eventHour > 12) {
+				if (eventMinute < 10) {
+					message += eventName + " starts at " + (eventHour - 12) + ":0" + eventMinute + "pm on " + date + ".<br/>";
+				} else {
+					message += eventName + " starts at " + (eventHour - 12) + ":" + eventMinute + "pm on " + date + ".<br/>";
+				}
+			} else {
+				if (eventMinute < 10) {
+					message += "Event starts at " + eventHour + ":0" + eventMinute + "am.<br/>";
+				} else {
+					message += "Event starts at " + eventHour + ":" + eventMinute + "am.<br/>";
+				}
+			}
+			if (days > 0 && hours > 0 && minutes > 0 && seconds > 0) {
+				if (days < 1) {
+					message += hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+				} else if (days < 1 && hours < 1) {
+					message += minutes + " minutes, " + seconds + " seconds";
+				} else if (days < 1 && hours < 1 && minutes < 1) {
+					message += seconds + " seconds";
+				} else {
+					message += days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+				}
+			} else if (days < 0 && hours < 0 && minutes < 0 && seconds < 0) {
+				message = "you missed the event";	
+			} else {
+				message += days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+			}
+		    document.getElementById("countdown").innerHTML = message;
+		    
+		    // Display width of time div elements and time values
+		    document.getElementById("secondsBackground").style.width = seconds * 2;
+		    document.getElementById("seconds").innerHTML = seconds;
+		    document.getElementById("minutesBackground").style.width = minutes * 2;
+		    document.getElementById("minutes").innerHTML = minutes;
+		    document.getElementById("hoursBackground").style.width = hours * 5;
+		    document.getElementById("hours").innerHTML = hours;
+		    document.getElementById("daysBackground").style.width = 120 - Math.floor((days / 100) * 100);
+		    document.getElementById("days").innerHTML = days;
+		    
+		    document.getElementById("roundSeconds").style.width = seconds * 2;
+			document.getElementById("roundSeconds").style.height = seconds * 2;
+			document.getElementById("roundSeconds").style.marginTop = 60 - seconds;
+			document.getElementById("roundSeconds").style.marginLeft = 60 - seconds;
+			
+			document.getElementById("roundMinutes").style.width = minutes * 2;
+			document.getElementById("roundMinutes").style.height = minutes * 2;
+			document.getElementById("roundMinutes").style.marginTop = 60 - minutes;
+			document.getElementById("roundMinutes").style.marginLeft = 60 - minutes;
+			
+			document.getElementById("roundHours").style.width = hours * 5;
+			document.getElementById("roundHours").style.height = hours * 5;
+			document.getElementById("roundHours").style.marginTop = 60 - (hours * 2.5);
+			document.getElementById("roundHours").style.marginLeft = 60 - (hours * 2.5);
+			
+			/*
+			document.getElementById("roundDays").style.width = Math.floor((days / 100) * 100);
+			document.getElementById("roundDays").style.height = Math.floor((days / 100) * 100);
+			document.getElementById("roundDays").style.marginTop = 120 - Math.floor((days / 100) * 100);
+			document.getElementById("roundDays").style.marginLeft = 120 - Math.floor((days / 100) * 100);
+		    */
+		    var timeElements = ["roundSeconds","roundMinutes","roundHours","roundDays"];
+		    /*
+		    for (i in timeElements) {
+		    	if (timeElements[i] == "roundSeconds") {
+		    		document.getElementById(timeElements[i]).style.width = seconds * 2;
+				    document.getElementById(timeElements[i]).style.height = seconds * 2;
+		    	}
+		    	if (timeElements[i] == "roundMinutes") {
+		    		document.getElementById(timeElements[i]).style.width = minutes * 2;
+				    document.getElementById(timeElements[i]).style.height = minutes * 2;
+		    	}
+		    	if (timeElements[i] == "roundHours") {
+		    		document.getElementById(timeElements[i]).style.width = hours * 5;
+				    document.getElementById(timeElements[i]).style.height = hours * 5;
+		    	}
+		    	if (timeElements[i] == "roundDays") {
+		    		document.getElementById(timeElements[i]).style.width = 120 - Math.floor((days / 100) * 100);
+				    document.getElementById(timeElements[i]).style.height = 120 - Math.floor((days / 100) * 100);
+		    	}
+		    	document.getElementById(timeElements[i]).style.marginTop = 60 - (seconds);
+				document.getElementById(timeElements[i]).style.marginLeft = 60 - (seconds);
+		    }
+		    */
+		    /*
+		     * top: 0px;
+		     * left: 0;
+		     * top + 120/2;
+		     * left + 120/2
+		     */
+		}, 1000);
+	</script>
+</html>
